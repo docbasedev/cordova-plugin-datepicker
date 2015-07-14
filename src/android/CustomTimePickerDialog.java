@@ -1,4 +1,4 @@
-package com.plugin.datepicker
+package com.plugin.datepicker;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
