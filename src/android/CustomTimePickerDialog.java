@@ -12,15 +12,25 @@ import android.widget.TimePicker;
 
 public class CustomTimePickerDialog extends TimePickerDialog {
 
-	private final static int TIME_PICKER_INTERVAL = 15;
 	private TimePicker timePicker;
 	private final OnTimeSetListener callback;
 
+	private final int minuteInterval;
+
 	public CustomTimePickerDialog(Context context, OnTimeSetListener callBack,
-			int hourOfDay, int minute, boolean is24HourView) {
-		super(context, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, callBack, hourOfDay, minute / TIME_PICKER_INTERVAL,
+			int hourOfDay, int minute, boolean is24HourView, int minuteInterval) {
+		this(context, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, callBack, hourOfDay, minute,
+				is24HourView, minuteInterval);
+	}
+
+	public CustomTimePickerDialog(Context context, int theme, OnTimeSetListener callBack,
+			int hourOfDay, int minute, boolean is24HourView, int minuteInterval) {
+		super(context, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, callBack, hourOfDay, minute / (minuteInterval == 0 ? 1 : minuteInterval),
 				is24HourView);
+		if (minuteInterval <= 0 || 30 < minuteInterval)
+			minuteInterval = 1;
 		this.callback = callBack;
+		this.minuteInterval = minuteInterval;
 	}
 
 	@Override
@@ -28,7 +38,7 @@ public class CustomTimePickerDialog extends TimePickerDialog {
 		if (callback != null && timePicker != null) {
 			timePicker.clearFocus();
 			callback.onTimeSet(timePicker, timePicker.getCurrentHour(),
-					timePicker.getCurrentMinute() * TIME_PICKER_INTERVAL);
+					timePicker.getCurrentMinute() * this.minuteInterval);
 		}
 	}
 
@@ -49,9 +59,9 @@ public class CustomTimePickerDialog extends TimePickerDialog {
 			NumberPicker mMinuteSpinner = (NumberPicker) timePicker
 					.findViewById(field.getInt(null));
 			mMinuteSpinner.setMinValue(0);
-			mMinuteSpinner.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
+			mMinuteSpinner.setMaxValue((60 / this.minuteInterval) - 1);
 			List<String> displayedValues = new ArrayList<String>();
-			for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+			for (int i = 0; i < 60; i += this.minuteInterval) {
 				displayedValues.add(String.format("%02d", i));
 			}
 			mMinuteSpinner.setDisplayedValues(displayedValues

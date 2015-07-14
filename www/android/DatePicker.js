@@ -32,7 +32,8 @@ DatePicker.prototype.show = function(options, cb, errCb) {
 		okText: '',
 		todayText: '',
 		nowText: '',
-		is24Hour: false
+		is24Hour: false,
+		minuteInterval: 1
 	};
 
 	for (var key in defaults) {
