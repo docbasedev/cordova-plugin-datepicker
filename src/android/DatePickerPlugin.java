@@ -80,6 +80,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 	private TimePicker timePicker;
 	private int timePickerHour = 0;
 	private int timePickerMinute = 0;
+	private int timePickerMinuteInterval = 1;
 	
 	private Runnable runnableTimeDialog(final DatePickerPlugin datePickerPlugin,
 			final Context currentCtx, final CallbackContext callbackContext,
@@ -87,13 +88,14 @@ public class DatePickerPlugin extends CordovaPlugin {
 		return new Runnable() {
 			@Override
 			public void run() {
+				timePickerMinuteInterval = jsonDate.minuteInterval;
 				final TimeSetListener timeSetListener = new TimeSetListener(datePickerPlugin, callbackContext, calendarDate);
 				final CustomTimePickerDialog timeDialog = new CustomTimePickerDialog(currentCtx, timeSetListener, jsonDate.hour,
 						jsonDate.minutes, jsonDate.is24Hour, jsonDate.minuteInterval) {
 					public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 						timePicker = view;
 						timePickerHour = hourOfDay;
-						timePickerMinute = minute;
+						timePickerMinute = minute * timePickerMinuteInterval;
 					}
 				};
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
