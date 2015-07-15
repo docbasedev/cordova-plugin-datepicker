@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
+import android.util.Log;
 
 public class CustomTimePickerDialog extends TimePickerDialog {
 
@@ -35,10 +36,10 @@ public class CustomTimePickerDialog extends TimePickerDialog {
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		if (callback != null && timePicker != null) {
-			timePicker.clearFocus();
-			callback.onTimeSet(timePicker, timePicker.getCurrentHour(),
-					timePicker.getCurrentMinute() * this.minuteInterval);
+		if (this.callback != null && this.timePicker != null) {
+			this.timePicker.clearFocus();
+			this.callback.onTimeSet(this.timePicker, this.timePicker.getCurrentHour(),
+					this.timePicker.getCurrentMinute());
 		}
 	}
 
@@ -58,6 +59,7 @@ public class CustomTimePickerDialog extends TimePickerDialog {
 
 			NumberPicker mMinuteSpinner = (NumberPicker) timePicker
 					.findViewById(field.getInt(null));
+			int currentMinuteIndex = mMinuteSpinner.getValue() / this.minuteInterval;
 			mMinuteSpinner.setMinValue(0);
 			mMinuteSpinner.setMaxValue((60 / this.minuteInterval) - 1);
 			List<String> displayedValues = new ArrayList<String>();
@@ -66,6 +68,8 @@ public class CustomTimePickerDialog extends TimePickerDialog {
 			}
 			mMinuteSpinner.setDisplayedValues(displayedValues
 					.toArray(new String[0]));
+			mMinuteSpinner.setValue(currentMinuteIndex);
+			this.onTimeChanged(this.timePicker, this.timePicker.getCurrentHour(), currentMinuteIndex);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

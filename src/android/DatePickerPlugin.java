@@ -95,7 +95,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 					public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 						timePicker = view;
 						timePickerHour = hourOfDay;
-						timePickerMinute = minute * timePickerMinuteInterval;
+						timePickerMinute = minute;
 					}
 				};
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -127,7 +127,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 						public void onClick(DialogInterface dialog, int which) {
 							if (timePicker != null) {
 								Calendar now = Calendar.getInstance();
-								timeSetListener.onTimeSet(timePicker, timePickerHour, timePickerMinute);
+								timeSetListener.onTimeSet(timePicker, timePickerHour, timePickerMinute * timePickerMinuteInterval);
 							}
 						}
 					});
